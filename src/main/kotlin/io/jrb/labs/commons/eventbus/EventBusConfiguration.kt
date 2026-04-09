@@ -22,17 +22,22 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.eventbus
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
+@Configuration
+class EventBusConfiguration() {
 
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
+    @Bean
+    fun applicationScope(): CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    @Bean
+    fun eventBus(): EventBus = InMemoryEventBus(applicationScope())
+
 }

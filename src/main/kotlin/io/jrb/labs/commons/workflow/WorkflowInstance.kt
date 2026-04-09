@@ -22,17 +22,19 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.workflow
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+import java.time.Instant
+import java.util.UUID
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
-
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
-}
+data class WorkflowInstance(
+    val instanceId: String = UUID.randomUUID().toString(),
+    val workflowName: String,
+    val correlationId: String,
+    val state: String,
+    val status: WorkflowStatus,
+    val startedAt: Instant = Instant.now(),
+    val updatedAt: Instant = Instant.now(),
+    val context: WorkflowContext = WorkflowContext(),
+    val history: List<WorkflowHistoryEntry> = emptyList()
+)

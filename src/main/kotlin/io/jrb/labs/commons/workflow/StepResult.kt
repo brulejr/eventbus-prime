@@ -22,17 +22,33 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.workflow
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+sealed interface StepResult<out T : Any> {
+    data class Success<T : Any>(
+        val response: T,
+        val metadata: Map<String, Any> = emptyMap()
+    ) : StepResult<T>
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
+    data class Failed(
+        val reason: String,
+        val code: String? = null,
+        val metadata: Map<String, Any> = emptyMap()
+    ) : StepResult<Nothing>
 
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
+    data class Errored(
+        val errorMessage: String,
+        val cause: Throwable? = null,
+        val metadata: Map<String, Any> = emptyMap()
+    ) : StepResult<Nothing>
+
+    data class Ignored(
+        val reason: String,
+        val metadata: Map<String, Any> = emptyMap()
+    ) : StepResult<Nothing>
+
+    data class Waiting(
+        val reason: String,
+        val metadata: Map<String, Any> = emptyMap()
+    ) : StepResult<Nothing>
 }

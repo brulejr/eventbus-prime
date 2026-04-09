@@ -22,17 +22,21 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.eventbus
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+/**
+ * Represents a subscriber to events on the event bus. Implementations of this interface will be invoked when an event
+ * is published to the bus that matches the subscriber's criteria (e.g., event type, feature ID, station ID, etc.).
+ * The subscriber is responsible for handling the event appropriately, which may include processing the event data,
+ * performing side effects, or triggering other actions in response to the event.
+ */
+fun interface EventSubscriber {
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
+    /**
+     * Handles an event published to the event bus. Implementations should handle the event as needed, such as
+     * processing the event data, performing side effects, or triggering other actions. This method is a suspend
+     * function, allowing for asynchronous processing of events if necessary.
+     */
+    suspend fun onEvent(event: EventEnvelope<*>)
 
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
 }

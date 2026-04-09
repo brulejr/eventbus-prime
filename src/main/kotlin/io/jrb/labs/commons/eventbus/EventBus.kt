@@ -22,17 +22,21 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.eventbus
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+/**
+ * Represents an event bus that can be used to publish and subscribe to events.
+ */
+interface EventBus {
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
+    /**
+     * Publishes an event to the event bus.
+     */
+    suspend fun publish(event: EventEnvelope<*>)
 
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
+    /**
+     * Subscribes an event subscriber to the event bus.
+     */
+    fun subscribe(subscriber: EventSubscriber)
+
 }

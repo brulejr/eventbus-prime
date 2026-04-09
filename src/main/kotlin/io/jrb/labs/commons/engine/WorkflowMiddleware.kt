@@ -22,36 +22,13 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.steps
+package io.jrb.labs.commons.engine
 
-import io.jrb.labs.commons.eventbus.EventEnvelope
-import io.jrb.labs.eventbusprime.sample.events.WorkRequested
-import io.jrb.labs.eventbusprime.sample.events.WorkValidated
 import io.jrb.labs.commons.workflow.StepResult
-import io.jrb.labs.commons.workflow.WorkflowContext
-import io.jrb.labs.commons.workflow.WorkflowInstance
-import io.jrb.labs.commons.workflow.WorkflowStep
-import org.springframework.stereotype.Component
 
-@Component
-class ValidateWorkStep : WorkflowStep<WorkRequested, WorkValidated> {
-    override val name: String = "validate-work"
-
-    override suspend fun handle(
-        instance: WorkflowInstance,
-        event: EventEnvelope<WorkRequested>,
-        context: WorkflowContext
-    ): StepResult<WorkValidated> {
-        val description = event.payload.description.trim()
-        return if (description.isBlank()) {
-            StepResult.Failed("Description must not be blank")
-        } else {
-            StepResult.Success(
-                WorkValidated(
-                    requestId = event.payload.requestId,
-                    normalizedDescription = description.uppercase()
-                )
-            )
-        }
-    }
+interface WorkflowMiddleware {
+    suspend fun <I : Any, O : Any> invoke(
+        invocation: StepInvocation<I, O>,
+        next: suspend (StepInvocation<I, O>) -> StepResult<O>
+    ): StepResult<O>
 }

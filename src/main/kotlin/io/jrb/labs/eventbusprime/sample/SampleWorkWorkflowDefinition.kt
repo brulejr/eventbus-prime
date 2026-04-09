@@ -28,8 +28,8 @@ import io.jrb.labs.eventbusprime.sample.events.WorkRequested
 import io.jrb.labs.eventbusprime.sample.events.WorkValidated
 import io.jrb.labs.eventbusprime.sample.steps.CompleteWorkStep
 import io.jrb.labs.eventbusprime.sample.steps.ValidateWorkStep
-import io.jrb.labs.eventbusprime.workflow.WorkflowDefinition
-import io.jrb.labs.eventbusprime.workflow.WorkflowTransition
+import io.jrb.labs.commons.workflow.WorkflowDefinition
+import io.jrb.labs.commons.workflow.WorkflowTransition
 import org.springframework.stereotype.Component
 
 @Component

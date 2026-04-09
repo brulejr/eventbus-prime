@@ -24,13 +24,13 @@
 
 package io.jrb.labs.eventbusprime.sample.steps
 
-import io.jrb.labs.eventbusprime.bus.EventEnvelope
+import io.jrb.labs.commons.eventbus.EventEnvelope
 import io.jrb.labs.eventbusprime.sample.events.WorkCompleted
 import io.jrb.labs.eventbusprime.sample.events.WorkValidated
-import io.jrb.labs.eventbusprime.workflow.StepResult
-import io.jrb.labs.eventbusprime.workflow.WorkflowContext
-import io.jrb.labs.eventbusprime.workflow.WorkflowInstance
-import io.jrb.labs.eventbusprime.workflow.WorkflowStep
+import io.jrb.labs.commons.workflow.StepResult
+import io.jrb.labs.commons.workflow.WorkflowContext
+import io.jrb.labs.commons.workflow.WorkflowInstance
+import io.jrb.labs.commons.workflow.WorkflowStep
 import org.springframework.stereotype.Component
 
 @Component

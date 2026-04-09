@@ -22,36 +22,25 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.steps
+package io.jrb.labs.commons.engine
 
-import io.jrb.labs.commons.eventbus.EventEnvelope
-import io.jrb.labs.eventbusprime.sample.events.WorkRequested
-import io.jrb.labs.eventbusprime.sample.events.WorkValidated
-import io.jrb.labs.commons.workflow.StepResult
-import io.jrb.labs.commons.workflow.WorkflowContext
 import io.jrb.labs.commons.workflow.WorkflowInstance
-import io.jrb.labs.commons.workflow.WorkflowStep
-import org.springframework.stereotype.Component
+import java.util.concurrent.ConcurrentHashMap
 
-@Component
-class ValidateWorkStep : WorkflowStep<WorkRequested, WorkValidated> {
-    override val name: String = "validate-work"
+class InMemoryWorkflowInstanceStore : WorkflowInstanceStore {
 
-    override suspend fun handle(
-        instance: WorkflowInstance,
-        event: EventEnvelope<WorkRequested>,
-        context: WorkflowContext
-    ): StepResult<WorkValidated> {
-        val description = event.payload.description.trim()
-        return if (description.isBlank()) {
-            StepResult.Failed("Description must not be blank")
-        } else {
-            StepResult.Success(
-                WorkValidated(
-                    requestId = event.payload.requestId,
-                    normalizedDescription = description.uppercase()
-                )
-            )
-        }
+    private val instances = ConcurrentHashMap<String, WorkflowInstance>()
+
+    override suspend fun save(instance: WorkflowInstance): WorkflowInstance {
+        instances[instance.instanceId] = instance
+        return instance
     }
+
+    override suspend fun findByInstanceId(instanceId: String): WorkflowInstance? = instances[instanceId]
+
+    override suspend fun findByCorrelationId(correlationId: String): List<WorkflowInstance> =
+        instances.values.filter { it.correlationId == correlationId }.sortedBy { it.startedAt }
+
+    override suspend fun findAll(): List<WorkflowInstance> =
+        instances.values.sortedBy { it.startedAt }
 }

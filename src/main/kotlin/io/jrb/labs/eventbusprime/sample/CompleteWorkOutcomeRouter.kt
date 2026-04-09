@@ -24,8 +24,13 @@
 
 package io.jrb.labs.eventbusprime.sample
 
+import io.jrb.labs.commons.workflow.OutcomeResolution
+import io.jrb.labs.commons.workflow.OutcomeRouter
+import io.jrb.labs.commons.workflow.RoutedEvent
+import io.jrb.labs.commons.workflow.StepResult
+import io.jrb.labs.commons.workflow.WorkflowInstance
+import io.jrb.labs.commons.workflow.WorkflowStatus
 import io.jrb.labs.eventbusprime.sample.events.WorkCompleted
-import io.jrb.labs.eventbusprime.workflow.*
 import org.springframework.stereotype.Component
 
 @Component

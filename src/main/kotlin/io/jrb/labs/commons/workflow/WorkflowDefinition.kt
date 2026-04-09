@@ -22,17 +22,13 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.workflow
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+interface WorkflowDefinition {
+    val name: String
+    val primingEventType: String
+    val initialState: String
+    val transitions: List<WorkflowTransition<*, *>>
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
-
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
+    fun correlationIdOf(payload: Any): String
 }

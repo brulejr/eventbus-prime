@@ -22,17 +22,22 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.eventbus
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+import java.time.Instant
+import java.util.UUID
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
-
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
-}
+/**
+ * EventEnvelope is a wrapper for events that are published to the event bus. It contains metadata about the event,
+ * such as the event type, correlation ID, causation ID, and workflow instance ID.
+ */
+data class EventEnvelope<T : Any>(
+    val eventId: String = UUID.randomUUID().toString(),
+    val eventType: String,
+    val occurredAt: Instant = Instant.now(),
+    val correlationId: String,
+    val causationId: String? = null,
+    val workflowInstanceId: String? = null,
+    val payload: T,
+    val metadata: Map<String, Any> = emptyMap()
+)

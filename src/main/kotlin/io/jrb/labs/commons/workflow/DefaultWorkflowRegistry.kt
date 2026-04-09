@@ -22,17 +22,14 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.workflow
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+class DefaultWorkflowRegistry(
+    private val workflowDefinitions: List<WorkflowDefinition>
+) : WorkflowRegistry {
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
+    override fun definitions(): List<WorkflowDefinition> = workflowDefinitions
 
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
+    override fun findByPrimingEventType(eventType: String): List<WorkflowDefinition> =
+        workflowDefinitions.filter { it.primingEventType == eventType }
 }

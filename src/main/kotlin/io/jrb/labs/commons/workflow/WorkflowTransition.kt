@@ -22,17 +22,14 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.workflow
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+import kotlin.reflect.KClass
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
-
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
-}
+data class WorkflowTransition<I : Any, O : Any>(
+    val fromState: String,
+    val inboundEventType: String,
+    val payloadType: KClass<I>,
+    val step: WorkflowStep<I, O>,
+    val outcomeRouter: OutcomeRouter<O>
+)

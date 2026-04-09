@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.workflow
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+import java.time.Instant
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
-
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
-}
+data class WorkflowHistoryEntry(
+    val timestamp: Instant = Instant.now(),
+    val stateBefore: String,
+    val stateAfter: String,
+    val inboundEventType: String,
+    val stepName: String,
+    val outcomeType: String,
+    val summary: String,
+    val outboundEventTypes: List<String> = emptyList()
+)

@@ -22,17 +22,22 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.workflow
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+data class WorkflowContext(
+    val attributes: Map<String, Any> = emptyMap(),
+    val recordedStepResults: Map<String, RecordedStepResult> = emptyMap()
+) {
+    fun withAttribute(key: String, value: Any): WorkflowContext =
+        copy(attributes = attributes + (key to value))
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
-
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
+    fun withRecordedStepResult(stepName: String, result: RecordedStepResult): WorkflowContext =
+        copy(recordedStepResults = recordedStepResults + (stepName to result))
 }
+
+data class RecordedStepResult(
+    val stepName: String,
+    val outcomeType: String,
+    val summary: String,
+    val metadata: Map<String, Any> = emptyMap()
+)

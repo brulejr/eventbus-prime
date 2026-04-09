@@ -22,17 +22,18 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime
+package io.jrb.labs.commons.engine
 
-import io.jrb.labs.commons.engine.WorkflowConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Import
+import io.jrb.labs.commons.workflow.WorkflowDefinition
+import io.jrb.labs.commons.workflow.WorkflowTransition
 
-@SpringBootApplication
-@Import(WorkflowConfiguration::class)
-class EventBusPrimeApplication
-
-fun main(args: Array<String>) {
-    runApplication<EventBusPrimeApplication>(*args)
+class TransitionMatcher {
+    fun findMatchingTransition(
+        definition: WorkflowDefinition,
+        currentState: String,
+        inboundEventType: String
+    ): WorkflowTransition<*, *>? =
+        definition.transitions.firstOrNull {
+            it.fromState == currentState && it.inboundEventType == inboundEventType
+        }
 }
