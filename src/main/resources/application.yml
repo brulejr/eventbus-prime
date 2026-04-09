@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: eventbus-prime
+
+server.port: 4400
+
+management:
+  endpoints:
+    web:
+      base-path: /mgmt
+      exposure:
+        include: health,info,metrics
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: EventBus Prime - Reference implementation of EventBus Workflow
+    profile: ${spring.profiles.active}

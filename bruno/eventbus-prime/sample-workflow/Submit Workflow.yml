@@ -1,0 +1,22 @@
+info:
+  name: Submit Workflow
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{eventbus_prime_url}}/api/work"
+  body:
+    type: json
+    data: |-
+      {
+        "requestId": "{{$guid}}",
+        "description": "Testing - {{$randomCity}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

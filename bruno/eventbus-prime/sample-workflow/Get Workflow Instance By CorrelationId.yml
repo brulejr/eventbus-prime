@@ -1,0 +1,19 @@
+info:
+  name: Get Workflow Instance By CorrelationId
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: "{{eventbus_prime_url}}/api/work/instances/by-correlation/:correlationId"
+  params:
+    - name: correlationId
+      value: b35ae703-05ef-49c2-a7fb-32bb492ce159
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
