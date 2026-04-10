@@ -8,7 +8,7 @@ http:
   url: "{{eventbus_prime_url}}/api/work/instances/:instanceId"
   params:
     - name: instanceId
-      value: 4af30b48-2959-43a4-8c38-ba6bc6d38ddb
+      value: d81d37be-049c-498a-9b3f-912f7d172ceb
       type: path
   auth: inherit
 
