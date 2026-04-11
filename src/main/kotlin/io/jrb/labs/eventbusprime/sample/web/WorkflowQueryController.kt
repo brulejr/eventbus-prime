@@ -22,13 +22,39 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.commons.engine
+package io.jrb.labs.eventbusprime.sample.web
 
-import io.jrb.labs.commons.workflow.WorkflowInstance
+import io.jrb.labs.commons.workflow.spi.WorkflowInstanceStore
+import kotlinx.coroutines.runBlocking
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
-interface WorkflowInstanceStore {
-    suspend fun save(instance: WorkflowInstance): WorkflowInstance
-    suspend fun findByInstanceId(instanceId: String): WorkflowInstance?
-    suspend fun findByCorrelationId(correlationId: String): List<WorkflowInstance>
-    suspend fun findAll(): List<WorkflowInstance>
+@RestController
+@RequestMapping("/api/work")
+class WorkflowQueryController(
+    private val instanceStore: WorkflowInstanceStore
+) {
+
+    @GetMapping("/instances")
+    fun findAllInstances() = runBlocking {
+        instanceStore.findAll()
+    }
+
+    @GetMapping("/{instanceId}")
+    fun findByInstanceId(@PathVariable instanceId: String) =
+        runBlocking {
+            instanceStore.findByInstanceId(instanceId)
+                ?: throw ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Workflow instance not found: $instanceId"
+                )
+        }
+
+    @GetMapping("/correlation/{correlationId}")
+    fun findByCorrelationId(@PathVariable correlationId: String) =
+        runBlocking {
+            instanceStore.findByCorrelationId(correlationId)
+        }
+
 }

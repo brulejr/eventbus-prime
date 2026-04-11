@@ -24,7 +24,16 @@
 
 package io.jrb.labs.eventbusprime.sample.events
 
+import io.jrb.labs.commons.workflow.api.BaseWorkflowEvent
+
 data class WorkRejected(
     val requestId: String,
-    val reason: String
+    val reason: String,
+    override val correlationId: String = requestId,
+    override val causationId: String? = null,
+    override val workflowInstanceId: String? = null
+) : BaseWorkflowEvent(
+    correlationId = correlationId,
+    causationId = causationId,
+    workflowInstanceId = workflowInstanceId
 )

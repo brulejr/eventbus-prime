@@ -22,42 +22,39 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.commons.engine
+package io.jrb.labs.eventbusprime.sample.config
 
+import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.eventbus.EventBus
-import io.jrb.labs.commons.eventbus.EventBusConfiguration
-import io.jrb.labs.commons.workflow.DefaultWorkflowRegistry
-import io.jrb.labs.commons.workflow.WorkflowDefinition
-import io.jrb.labs.commons.workflow.WorkflowRegistry
+import io.jrb.labs.eventbusprime.sample.events.WorkCompleted
+import io.jrb.labs.eventbusprime.sample.events.WorkRejected
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
 
 @Configuration
-@Import(EventBusConfiguration::class)
-class WorkflowConfiguration {
+class SampleEventObserversConfiguration {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     @Bean
-    fun trafficCop(
-        workflowRegistry: WorkflowRegistry,
-        instanceStore: WorkflowInstanceStore,
-        transitionMatcher: TransitionMatcher,
-        stepExecutor: StepExecutor,
-        eventBus: EventBus
-    ): WorkflowTrafficCop = DefaultWorkflowTrafficCop(workflowRegistry, instanceStore, transitionMatcher, stepExecutor, eventBus)
+    fun completedWorkSubscription(eventBus: EventBus<Event>): EventBus.Subscription =
+        eventBus.subscribe(WorkCompleted::class.java) { event ->
+            logger.info(
+                "Observed WorkCompleted requestId={} result={}",
+                event.requestId,
+                event.result
+            )
+        }
 
     @Bean
-    fun workflowRegistry(workflowDefinitions: List<WorkflowDefinition>): WorkflowRegistry =
-        DefaultWorkflowRegistry(workflowDefinitions)
-
-    @Bean
-    fun instanceStore(): WorkflowInstanceStore = InMemoryWorkflowInstanceStore()
-
-    @Bean
-    fun transitionMatcher(): TransitionMatcher = TransitionMatcher()
-
-    @Bean
-    fun stepExecutor(middlewares: List<WorkflowMiddleware>): StepExecutor = StepExecutor(middlewares)
-
+    fun rejectedWorkSubscription(eventBus: EventBus<Event>): EventBus.Subscription =
+        eventBus.subscribe(WorkRejected::class.java) { event ->
+            logger.info(
+                "Observed WorkRejected requestId={} reason={}",
+                event.requestId,
+                event.reason
+            )
+        }
 
 }

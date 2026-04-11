@@ -22,29 +22,25 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.commons.observability
+package io.jrb.labs.eventbusprime.sample.config
 
-import io.jrb.labs.commons.engine.StepInvocation
-import io.jrb.labs.commons.engine.WorkflowMiddleware
-import io.jrb.labs.commons.workflow.StepResult
+import io.jrb.labs.commons.eventbus.Event
+import io.jrb.labs.commons.workflow.api.StepResult
+import io.jrb.labs.commons.workflow.engine.StepInvocation
+import io.jrb.labs.commons.workflow.engine.WorkflowMiddleware
 import org.slf4j.LoggerFactory
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
-import org.springframework.stereotype.Component
 import kotlin.system.measureTimeMillis
 
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
 class LoggingWorkflowMiddleware : WorkflowMiddleware {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    @Suppress("UNCHECKED_CAST")
-    override suspend fun <I : Any, O : Any> invoke(
+    override suspend fun <I : Event, O : Event> invoke(
         invocation: StepInvocation<I, O>,
         next: suspend (StepInvocation<I, O>) -> StepResult<O>
     ): StepResult<O> {
         lateinit var result: StepResult<O>
+
         val durationMs = measureTimeMillis {
             result = try {
                 next(invocation)
@@ -57,16 +53,17 @@ class LoggingWorkflowMiddleware : WorkflowMiddleware {
         }
 
         logger.info(
-            "workflow={} instanceId={} step={} state={} inboundEventType={} resultType={} durationMs={}",
+            "workflow={} instanceId={} step={} state={} inboundEvent={} resultType={} durationMs={}",
             invocation.instance.workflowName,
             invocation.instance.instanceId,
             invocation.step.name,
             invocation.instance.state,
-            invocation.event.eventType,
+            invocation.event.name,
             result::class.simpleName,
             durationMs
         )
 
         return result
     }
+
 }

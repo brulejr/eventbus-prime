@@ -24,7 +24,12 @@
 
 package io.jrb.labs.eventbusprime.sample.events
 
+import io.jrb.labs.commons.workflow.api.BaseWorkflowEvent
+
 data class WorkRequested(
     val requestId: String,
-    val description: String
+    val description: String,
+    override val correlationId: String = requestId
+) : BaseWorkflowEvent(
+    correlationId = correlationId
 )

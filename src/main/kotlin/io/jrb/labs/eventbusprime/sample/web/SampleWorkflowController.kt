@@ -22,22 +22,40 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.commons.engine
+package io.jrb.labs.eventbusprime.sample.web
 
-import io.jrb.labs.commons.workflow.StepResult
+import io.jrb.labs.commons.eventbus.Event
+import io.jrb.labs.commons.eventbus.EventBus
+import io.jrb.labs.commons.workflow.spi.WorkflowInstanceStore
+import io.jrb.labs.eventbusprime.sample.events.WorkRequested
+import kotlinx.coroutines.runBlocking
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-class StepExecutor(
-    private val middlewares: List<WorkflowMiddleware>
+@RestController
+@RequestMapping("/api/work")
+class SampleWorkflowController(
+    private val eventBus: EventBus<Event>,
+    private val workflowInstanceStore: WorkflowInstanceStore
 ) {
-    suspend fun <I : Any, O : Any> execute(invocation: StepInvocation<I, O>): StepResult<O> {
-        val terminal: suspend (StepInvocation<I, O>) -> StepResult<O> = { current ->
-            current.step.handle(current.instance, current.event, current.instance.context)
+
+    @PostMapping
+    fun submit(@RequestBody request: SubmitWorkRequest): Map<String, String> {
+        val event = WorkRequested(
+            requestId = request.requestId,
+            description = request.description
+        )
+
+        runBlocking {
+            eventBus.publish(event)
         }
 
-        val chain = middlewares.reversed().fold(terminal) { next, middleware ->
-            { current -> middleware.invoke(current, next) }
-        }
-
-        return chain(invocation)
+        return mapOf(
+            "status" to "accepted",
+            "requestId" to request.requestId
+        )
     }
+
 }

@@ -5,10 +5,10 @@ info:
 
 http:
   method: GET
-  url: "{{eventbus_prime_url}}/api/work/instances/by-correlation/:correlationId"
+  url: "{{eventbus_prime_url}}/api/work/correlation/:correlationId"
   params:
     - name: correlationId
-      value: b35ae703-05ef-49c2-a7fb-32bb492ce159
+      value: e9c9e525-ac16-49bd-a1f6-c5492ef9c180
       type: path
   auth: inherit
 

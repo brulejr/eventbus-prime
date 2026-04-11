@@ -65,6 +65,7 @@ dependencies {
         implementation(platform("io.jrb.labs:ksb-dependency-bom:$ksbCommonsVersion"))
     }
     implementation("io.jrb.labs:ksb-commons-ms-core")
+    implementation("io.jrb.labs:ksb-commons-workflow-core")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")

@@ -22,14 +22,17 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample
+package io.jrb.labs.eventbusprime.sample.workflow
 
+import io.jrb.labs.commons.eventbus.Event
+import io.jrb.labs.commons.workflow.api.WorkflowDefinition
+import io.jrb.labs.commons.workflow.api.WorkflowTransition
 import io.jrb.labs.eventbusprime.sample.events.WorkRequested
 import io.jrb.labs.eventbusprime.sample.events.WorkValidated
+import io.jrb.labs.eventbusprime.sample.routing.CompleteWorkOutcomeRouter
+import io.jrb.labs.eventbusprime.sample.routing.ValidateWorkOutcomeRouter
 import io.jrb.labs.eventbusprime.sample.steps.CompleteWorkStep
 import io.jrb.labs.eventbusprime.sample.steps.ValidateWorkStep
-import io.jrb.labs.commons.workflow.WorkflowDefinition
-import io.jrb.labs.commons.workflow.WorkflowTransition
 import org.springframework.stereotype.Component
 
 @Component
@@ -41,30 +44,30 @@ class SampleWorkWorkflowDefinition(
 ) : WorkflowDefinition {
 
     override val name: String = "sample-workflow"
-    override val primingEventType: String = "WorkRequested"
+
+    override val primingEventClass = WorkRequested::class
+
     override val initialState: String = "RECEIVED"
 
     override val transitions = listOf(
         WorkflowTransition(
             fromState = "RECEIVED",
-            inboundEventType = "WorkRequested",
-            payloadType = WorkRequested::class,
+            inboundEventClass = WorkRequested::class,
             step = validateWorkStep,
             outcomeRouter = validateWorkOutcomeRouter
         ),
         WorkflowTransition(
             fromState = "VALIDATED",
-            inboundEventType = "WorkValidated",
-            payloadType = WorkValidated::class,
+            inboundEventClass = WorkValidated::class,
             step = completeWorkStep,
             outcomeRouter = completeWorkOutcomeRouter
         )
     )
 
-    override fun correlationIdOf(payload: Any): String =
-        when (payload) {
-            is WorkRequested -> payload.requestId
-            is WorkValidated -> payload.requestId
-            else -> error("Unsupported payload type: ${payload::class.qualifiedName}")
+    override fun correlationIdOf(event: Event): String =
+        when (event) {
+            is WorkRequested -> event.requestId
+            else -> error("Unsupported priming event type: ${event::class.qualifiedName}")
         }
+
 }

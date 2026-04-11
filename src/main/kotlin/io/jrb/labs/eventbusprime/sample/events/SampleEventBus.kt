@@ -22,17 +22,9 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.commons.workflow
+package io.jrb.labs.eventbusprime.sample.events
 
-import java.time.Instant
+import io.jrb.labs.commons.eventbus.Event
+import io.jrb.labs.commons.eventbus.EventBus
 
-data class WorkflowHistoryEntry(
-    val timestamp: Instant = Instant.now(),
-    val stateBefore: String,
-    val stateAfter: String,
-    val inboundEventType: String,
-    val stepName: String,
-    val outcomeType: String,
-    val summary: String,
-    val outboundEventTypes: List<String> = emptyList()
-)
+class SampleEventBus : EventBus<Event>()

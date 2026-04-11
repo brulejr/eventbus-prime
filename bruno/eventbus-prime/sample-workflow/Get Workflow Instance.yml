@@ -5,10 +5,10 @@ info:
 
 http:
   method: GET
-  url: "{{eventbus_prime_url}}/api/work/instances/:instanceId"
+  url: "{{eventbus_prime_url}}/api/work/:instanceId"
   params:
     - name: instanceId
-      value: d81d37be-049c-498a-9b3f-912f7d172ceb
+      value: b4ff2adf-52f5-4524-8019-6d16a3ee3c57
       type: path
   auth: inherit
 

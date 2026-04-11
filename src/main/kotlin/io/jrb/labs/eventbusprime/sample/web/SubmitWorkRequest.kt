@@ -22,13 +22,9 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.commons.engine
+package io.jrb.labs.eventbusprime.sample.web
 
-import io.jrb.labs.commons.workflow.StepResult
-
-interface WorkflowMiddleware {
-    suspend fun <I : Any, O : Any> invoke(
-        invocation: StepInvocation<I, O>,
-        next: suspend (StepInvocation<I, O>) -> StepResult<O>
-    ): StepResult<O>
-}
+data class SubmitWorkRequest(
+    val requestId: String,
+    val description: String
+)

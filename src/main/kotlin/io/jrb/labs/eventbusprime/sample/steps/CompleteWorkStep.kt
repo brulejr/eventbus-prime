@@ -24,13 +24,12 @@
 
 package io.jrb.labs.eventbusprime.sample.steps
 
-import io.jrb.labs.commons.eventbus.EventEnvelope
+import io.jrb.labs.commons.workflow.api.StepResult
+import io.jrb.labs.commons.workflow.api.WorkflowContext
+import io.jrb.labs.commons.workflow.api.WorkflowInstance
+import io.jrb.labs.commons.workflow.api.WorkflowStep
 import io.jrb.labs.eventbusprime.sample.events.WorkCompleted
 import io.jrb.labs.eventbusprime.sample.events.WorkValidated
-import io.jrb.labs.commons.workflow.StepResult
-import io.jrb.labs.commons.workflow.WorkflowContext
-import io.jrb.labs.commons.workflow.WorkflowInstance
-import io.jrb.labs.commons.workflow.WorkflowStep
 import org.springframework.stereotype.Component
 
 @Component
@@ -39,13 +38,18 @@ class CompleteWorkStep : WorkflowStep<WorkValidated, WorkCompleted> {
 
     override suspend fun handle(
         instance: WorkflowInstance,
-        event: EventEnvelope<WorkValidated>,
+        event: WorkValidated,
         context: WorkflowContext
-    ): StepResult<WorkCompleted> =
-        StepResult.Success(
+    ): StepResult<WorkCompleted> {
+        return StepResult.Success(
             WorkCompleted(
-                requestId = event.payload.requestId,
-                result = "Processed: ${event.payload.normalizedDescription}"
+                requestId = event.requestId,
+                result = "Processed: ${event.normalizedDescription}",
+                correlationId = event.correlationId,
+                causationId = event.eventId,
+                workflowInstanceId = instance.instanceId
             )
         )
+    }
+
 }

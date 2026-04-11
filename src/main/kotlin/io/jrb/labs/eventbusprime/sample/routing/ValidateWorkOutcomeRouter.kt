@@ -22,20 +22,21 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample
+package io.jrb.labs.eventbusprime.sample.routing
 
-import io.jrb.labs.commons.workflow.OutcomeResolution
-import io.jrb.labs.commons.workflow.OutcomeRouter
-import io.jrb.labs.commons.workflow.RoutedEvent
-import io.jrb.labs.commons.workflow.StepResult
-import io.jrb.labs.commons.workflow.WorkflowInstance
-import io.jrb.labs.commons.workflow.WorkflowStatus
+import io.jrb.labs.commons.workflow.api.OutcomeResolution
+import io.jrb.labs.commons.workflow.api.OutcomeRouter
+import io.jrb.labs.commons.workflow.api.RoutedEvent
+import io.jrb.labs.commons.workflow.api.StepResult
+import io.jrb.labs.commons.workflow.api.WorkflowInstance
+import io.jrb.labs.commons.workflow.api.WorkflowStatus
 import io.jrb.labs.eventbusprime.sample.events.WorkRejected
 import io.jrb.labs.eventbusprime.sample.events.WorkValidated
 import org.springframework.stereotype.Component
 
 @Component
 class ValidateWorkOutcomeRouter : OutcomeRouter<WorkValidated> {
+
     override fun route(
         result: StepResult<WorkValidated>,
         instance: WorkflowInstance
@@ -45,36 +46,39 @@ class ValidateWorkOutcomeRouter : OutcomeRouter<WorkValidated> {
                 nextState = "VALIDATED",
                 nextStatus = WorkflowStatus.RUNNING,
                 outboundEvents = listOf(
-                    RoutedEvent(
-                        eventType = "WorkValidated",
-                        payload = result.response
-                    )
+                    RoutedEvent(result.response)
                 )
             )
+
             is StepResult.Failed -> OutcomeResolution(
                 nextState = "FAILED",
                 nextStatus = WorkflowStatus.FAILED,
                 outboundEvents = listOf(
                     RoutedEvent(
-                        eventType = "WorkRejected",
-                        payload = WorkRejected(
+                        WorkRejected(
                             requestId = instance.correlationId,
-                            reason = result.reason
+                            reason = result.reason,
+                            correlationId = instance.correlationId,
+                            workflowInstanceId = instance.instanceId
                         )
                     )
                 )
             )
+
             is StepResult.Errored -> OutcomeResolution(
                 nextState = "ERRORED",
                 nextStatus = WorkflowStatus.ERRORED
             )
+
             is StepResult.Ignored -> OutcomeResolution(
                 nextState = instance.state,
                 nextStatus = instance.status
             )
+
             is StepResult.Waiting -> OutcomeResolution(
                 nextState = instance.state,
                 nextStatus = WorkflowStatus.WAITING
             )
         }
+
 }

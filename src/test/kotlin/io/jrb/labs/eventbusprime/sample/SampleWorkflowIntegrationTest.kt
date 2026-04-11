@@ -24,8 +24,8 @@
 
 package io.jrb.labs.eventbusprime.sample
 
-import io.jrb.labs.commons.eventbus.EventBus
-import io.jrb.labs.commons.eventbus.EventEnvelope
+import io.jrb.labs.commons.bus.EventBus
+import io.jrb.labs.commons.bus.EventEnvelope
 import io.jrb.labs.commons.engine.WorkflowInstanceStore
 import io.jrb.labs.eventbusprime.sample.events.WorkRequested
 import kotlinx.coroutines.delay

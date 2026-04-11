@@ -24,34 +24,38 @@
 
 package io.jrb.labs.eventbusprime.sample.steps
 
-import io.jrb.labs.commons.eventbus.EventEnvelope
+import io.jrb.labs.commons.workflow.api.StepResult
+import io.jrb.labs.commons.workflow.api.WorkflowContext
+import io.jrb.labs.commons.workflow.api.WorkflowInstance
+import io.jrb.labs.commons.workflow.api.WorkflowStep
 import io.jrb.labs.eventbusprime.sample.events.WorkRequested
 import io.jrb.labs.eventbusprime.sample.events.WorkValidated
-import io.jrb.labs.commons.workflow.StepResult
-import io.jrb.labs.commons.workflow.WorkflowContext
-import io.jrb.labs.commons.workflow.WorkflowInstance
-import io.jrb.labs.commons.workflow.WorkflowStep
 import org.springframework.stereotype.Component
 
 @Component
 class ValidateWorkStep : WorkflowStep<WorkRequested, WorkValidated> {
+
     override val name: String = "validate-work"
 
     override suspend fun handle(
         instance: WorkflowInstance,
-        event: EventEnvelope<WorkRequested>,
+        event: WorkRequested,
         context: WorkflowContext
     ): StepResult<WorkValidated> {
-        val description = event.payload.description.trim()
+        val description = event.description.trim()
         return if (description.isBlank()) {
             StepResult.Failed("Description must not be blank")
         } else {
             StepResult.Success(
                 WorkValidated(
-                    requestId = event.payload.requestId,
-                    normalizedDescription = description.uppercase()
+                    requestId = event.requestId,
+                    normalizedDescription = description.uppercase(),
+                    correlationId = event.correlationId,
+                    causationId = event.eventId,
+                    workflowInstanceId = instance.instanceId
                 )
             )
         }
     }
+
 }
