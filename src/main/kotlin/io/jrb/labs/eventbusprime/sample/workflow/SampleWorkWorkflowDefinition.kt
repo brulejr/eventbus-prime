@@ -27,20 +27,18 @@ package io.jrb.labs.eventbusprime.sample.workflow
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.workflow.api.WorkflowDefinition
 import io.jrb.labs.commons.workflow.api.WorkflowTransition
+import io.jrb.labs.eventbusprime.sample.events.ApprovalReceived
 import io.jrb.labs.eventbusprime.sample.events.WorkRequested
-import io.jrb.labs.eventbusprime.sample.events.WorkValidated
 import io.jrb.labs.eventbusprime.sample.routing.CompleteWorkOutcomeRouter
 import io.jrb.labs.eventbusprime.sample.routing.ValidateWorkOutcomeRouter
-import io.jrb.labs.eventbusprime.sample.steps.CompleteWorkStep
+import io.jrb.labs.eventbusprime.sample.steps.ApproveWorkStep
 import io.jrb.labs.eventbusprime.sample.steps.ValidateWorkStep
-import org.springframework.stereotype.Component
 
-@Component
 class SampleWorkWorkflowDefinition(
-    private val validateWorkStep: ValidateWorkStep,
-    private val validateWorkOutcomeRouter: ValidateWorkOutcomeRouter,
-    private val completeWorkStep: CompleteWorkStep,
-    private val completeWorkOutcomeRouter: CompleteWorkOutcomeRouter
+    validateWorkStep: ValidateWorkStep,
+    validateWorkOutcomeRouter: ValidateWorkOutcomeRouter,
+    approveWorkStep: ApproveWorkStep,
+    completeWorkOutcomeRouter: CompleteWorkOutcomeRouter
 ) : WorkflowDefinition {
 
     override val name: String = "sample-workflow"
@@ -57,9 +55,9 @@ class SampleWorkWorkflowDefinition(
             outcomeRouter = validateWorkOutcomeRouter
         ),
         WorkflowTransition(
-            fromState = "VALIDATED",
-            inboundEventClass = WorkValidated::class,
-            step = completeWorkStep,
+            fromState = "WAITING_APPROVAL",
+            inboundEventClass = ApprovalReceived::class,
+            step = approveWorkStep,
             outcomeRouter = completeWorkOutcomeRouter
         )
     )

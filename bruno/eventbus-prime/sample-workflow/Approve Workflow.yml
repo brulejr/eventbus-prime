@@ -1,0 +1,22 @@
+info:
+  name: Approve Workflow
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{eventbus_prime_url}}/api/work/approve"
+  body:
+    type: json
+    data: |-
+      {
+        "requestId": "{{correlationId}}",
+        "approvedBy": "{{$randomUserName}}"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

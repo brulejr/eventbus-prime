@@ -30,11 +30,10 @@ import io.jrb.labs.commons.workflow.api.RoutedEvent
 import io.jrb.labs.commons.workflow.api.StepResult
 import io.jrb.labs.commons.workflow.api.WorkflowInstance
 import io.jrb.labs.commons.workflow.api.WorkflowStatus
+import io.jrb.labs.eventbusprime.sample.events.ApprovalRequested
 import io.jrb.labs.eventbusprime.sample.events.WorkRejected
 import io.jrb.labs.eventbusprime.sample.events.WorkValidated
-import org.springframework.stereotype.Component
 
-@Component
 class ValidateWorkOutcomeRouter : OutcomeRouter<WorkValidated> {
 
     override fun route(
@@ -43,10 +42,17 @@ class ValidateWorkOutcomeRouter : OutcomeRouter<WorkValidated> {
     ): OutcomeResolution =
         when (result) {
             is StepResult.Success -> OutcomeResolution(
-                nextState = "VALIDATED",
-                nextStatus = WorkflowStatus.RUNNING,
+                nextState = "WAITING_APPROVAL",
+                nextStatus = WorkflowStatus.WAITING,
                 outboundEvents = listOf(
-                    RoutedEvent(result.response)
+                    RoutedEvent(
+                        ApprovalRequested(
+                            requestId = result.response.requestId,
+                            correlationId = instance.correlationId,
+                            causationId = result.response.eventId,
+                            workflowInstanceId = instance.instanceId
+                        )
+                    )
                 )
             )
 

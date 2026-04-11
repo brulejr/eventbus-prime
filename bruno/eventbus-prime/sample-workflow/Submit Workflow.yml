@@ -15,6 +15,13 @@ http:
       }
   auth: inherit
 
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const correlationId = res.body.requestId;
+        bru.setVar("correlationId", correlationId);
+
 settings:
   encodeUrl: true
   timeout: 0

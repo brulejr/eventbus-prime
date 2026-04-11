@@ -26,11 +26,13 @@ package io.jrb.labs.eventbusprime.sample.config
 
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.eventbus.EventBus
+import io.jrb.labs.eventbusprime.sample.events.ApprovalRequested
 import io.jrb.labs.eventbusprime.sample.events.WorkCompleted
 import io.jrb.labs.eventbusprime.sample.events.WorkRejected
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import kotlin.jvm.java
 
 @Configuration
 class SampleEventObserversConfiguration {
@@ -54,6 +56,16 @@ class SampleEventObserversConfiguration {
                 "Observed WorkRejected requestId={} reason={}",
                 event.requestId,
                 event.reason
+            )
+        }
+
+    @Bean
+    fun approvalRequestedSubscription(eventBus: EventBus<Event>): EventBus.Subscription =
+        eventBus.subscribe(ApprovalRequested::class.java) { event ->
+            logger.info(
+                "Observed ApprovalRequested requestId={} workflowInstanceId={}",
+                event.requestId,
+                event.workflowInstanceId
             )
         }
 

@@ -40,6 +40,7 @@ import io.jrb.labs.commons.workflow.support.InMemoryWorkflowInstanceStore
 import io.jrb.labs.eventbusprime.sample.events.SampleEventBus
 import io.jrb.labs.eventbusprime.sample.routing.CompleteWorkOutcomeRouter
 import io.jrb.labs.eventbusprime.sample.routing.ValidateWorkOutcomeRouter
+import io.jrb.labs.eventbusprime.sample.steps.ApproveWorkStep
 import io.jrb.labs.eventbusprime.sample.steps.CompleteWorkStep
 import io.jrb.labs.eventbusprime.sample.steps.ValidateWorkStep
 import io.jrb.labs.eventbusprime.sample.workflow.SampleWorkWorkflowDefinition
@@ -62,6 +63,9 @@ class SampleWorkflowConfiguration {
         CompleteWorkStep()
 
     @Bean
+    fun approveWorkStep(): ApproveWorkStep = ApproveWorkStep()
+
+    @Bean
     fun validateWorkOutcomeRouter(): ValidateWorkOutcomeRouter =
         ValidateWorkOutcomeRouter()
 
@@ -73,13 +77,13 @@ class SampleWorkflowConfiguration {
     fun sampleWorkflowDefinition(
         validateWorkStep: ValidateWorkStep,
         validateWorkOutcomeRouter: ValidateWorkOutcomeRouter,
-        completeWorkStep: CompleteWorkStep,
+        approveWorkStep: ApproveWorkStep,
         completeWorkOutcomeRouter: CompleteWorkOutcomeRouter
     ): WorkflowDefinition =
         SampleWorkWorkflowDefinition(
             validateWorkStep = validateWorkStep,
             validateWorkOutcomeRouter = validateWorkOutcomeRouter,
-            completeWorkStep = completeWorkStep,
+            approveWorkStep = approveWorkStep,
             completeWorkOutcomeRouter = completeWorkOutcomeRouter
         )
 
