@@ -1,0 +1,30 @@
+info:
+  name: Submit Workflow
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{eventbus_prime_url}}/api/quotes/sync"
+  body:
+    type: json
+    data: |-
+      {
+        "sku": "{{$guid}}",
+        "quantity": 10,
+        "destinationZip": "12309"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const correlationId = res.body.requestId;
+        bru.setVar("correlationId", correlationId);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
