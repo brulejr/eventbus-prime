@@ -44,7 +44,10 @@ class ValidateWorkStep : WorkflowStep<WorkRequested, WorkValidated> {
     ): StepResult<WorkValidated> {
         val description = event.description.trim()
         return if (description.isBlank()) {
-            StepResult.Failed("Description must not be blank")
+            StepResult.Failed(
+                reason = "Description must not be blank",
+                code = "DESCRIPTION_REQUIRED"
+            )
         } else {
             StepResult.Success(
                 WorkValidated(

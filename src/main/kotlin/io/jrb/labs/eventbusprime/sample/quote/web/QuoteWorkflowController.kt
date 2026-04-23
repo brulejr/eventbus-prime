@@ -26,12 +26,12 @@ package io.jrb.labs.eventbusprime.sample.quote.web
 
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.eventbusprime.sample.quote.events.QuoteCompleted
-import io.jrb.labs.eventbusprime.sample.quote.events.QuoteFailed
 import io.jrb.labs.eventbusprime.sample.quote.events.QuoteRequested
 import io.jrb.labs.eventbusprime.sample.quote.sync.BlockingWorkflowRunner
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.math.BigDecimal
 import java.time.Duration
 import java.util.UUID
@@ -70,12 +70,6 @@ class QuoteWorkflowController(
                 totalCost = terminal.totalCost,
                 status = "COMPLETED"
             )
-
-            is QuoteFailed -> throw ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                terminal.reason
-            )
-
             else -> throw IllegalStateException(
                 "Unexpected terminal event type: ${terminal::class.qualifiedName}"
             )

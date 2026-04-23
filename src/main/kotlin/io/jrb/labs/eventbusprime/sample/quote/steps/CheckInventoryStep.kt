@@ -43,7 +43,10 @@ class CheckInventoryStep : WorkflowStep<QuoteValidated, InventoryChecked> {
         val available = event.quantity <= 25
 
         return if (!available) {
-            StepResult.Failed("Requested quantity exceeds available inventory")
+            StepResult.Failed(
+                reason = "Requested quantity exceeds available inventory",
+                code = "INVENTORY_UNAVAILABLE"
+            )
         } else {
             StepResult.Success(
                 InventoryChecked(

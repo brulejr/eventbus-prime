@@ -26,8 +26,9 @@ package io.jrb.labs.eventbusprime.sample.quote.sync
 
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.eventbus.EventBus
+import io.jrb.labs.commons.workflow.api.WorkflowFailedEvent
+import io.jrb.labs.commons.workflow.api.WorkflowRequestFailedException
 import io.jrb.labs.eventbusprime.sample.quote.events.QuoteCompleted
-import io.jrb.labs.eventbusprime.sample.quote.events.QuoteFailed
 
 class QuoteWorkflowCompletionListener(
     private val eventBus: EventBus<Event>,
@@ -37,10 +38,13 @@ class QuoteWorkflowCompletionListener(
     fun subscribe(): List<EventBus.Subscription> =
         listOf(
             eventBus.subscribe(QuoteCompleted::class.java) { event ->
-                runner.complete(event.correlationId!!, event)
+                runner.complete(event.correlationId, event)
             },
-            eventBus.subscribe(QuoteFailed::class.java) { event ->
-                runner.complete(event.correlationId!!, event)
+            eventBus.subscribe(WorkflowFailedEvent::class.java) { event ->
+                runner.fail(
+                    correlationId = event.correlationId,
+                    throwable = WorkflowRequestFailedException(event.failure)
+                )
             }
         )
 

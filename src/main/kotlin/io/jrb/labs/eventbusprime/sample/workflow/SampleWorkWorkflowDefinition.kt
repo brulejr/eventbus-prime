@@ -68,4 +68,10 @@ class SampleWorkWorkflowDefinition(
             else -> error("Unsupported priming event type: ${event::class.qualifiedName}")
         }
 
+    override fun requestIdOf(event: Event): String? =
+        when (event) {
+            is WorkRequested -> event.requestId
+            else -> null
+        }
+
 }

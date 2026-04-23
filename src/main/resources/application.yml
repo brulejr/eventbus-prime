@@ -3,6 +3,7 @@ spring:
     name: eventbus-prime
 
 server.port: 4400
+server.error.include-message: always
 
 management:
   endpoints:

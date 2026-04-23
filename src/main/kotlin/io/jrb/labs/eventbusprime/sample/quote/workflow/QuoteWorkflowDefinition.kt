@@ -88,4 +88,10 @@ class QuoteWorkflowDefinition(
             else -> error("Unsupported priming event type: ${event::class.qualifiedName}")
         }
 
+    override fun requestIdOf(event: Event): String? =
+        when (event) {
+            is QuoteRequested -> event.requestId
+            else -> null
+        }
+
 }

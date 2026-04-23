@@ -41,13 +41,22 @@ class ValidateQuoteStep : WorkflowStep<QuoteRequested, QuoteValidated> {
         context: WorkflowContext
     ): StepResult<QuoteValidated> {
         if (event.sku.isBlank()) {
-            return StepResult.Failed("SKU must not be blank")
+            return StepResult.Failed(
+                reason = "SKU must not be blank",
+                code = "SKU_REQUIRED"
+            )
         }
         if (event.quantity <= 0) {
-            return StepResult.Failed("Quantity must be greater than zero")
+            return StepResult.Failed(
+                reason = "Quantity must be greater than zero",
+                code = "QUANTITY_INVALID"
+            )
         }
         if (!Regex("""\d{5}""").matches(event.destinationZip)) {
-            return StepResult.Failed("Destination ZIP must be a 5-digit ZIP code")
+            return StepResult.Failed(
+                reason = "Destination ZIP must be a 5-digit ZIP code",
+                code = "ZIP_INVALID"
+            )
         }
 
         return StepResult.Success(
