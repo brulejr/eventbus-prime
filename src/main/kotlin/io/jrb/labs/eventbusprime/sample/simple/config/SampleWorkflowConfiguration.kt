@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.config
+package io.jrb.labs.eventbusprime.sample.simple.config
 
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.eventbus.EventBus
@@ -37,13 +37,13 @@ import io.jrb.labs.commons.workflow.spi.EventBusWorkflowAdapter
 import io.jrb.labs.commons.workflow.spi.WorkflowInstanceStore
 import io.jrb.labs.commons.workflow.support.DefaultWorkflowRegistry
 import io.jrb.labs.commons.workflow.support.InMemoryWorkflowInstanceStore
-import io.jrb.labs.eventbusprime.sample.events.SampleEventBus
-import io.jrb.labs.eventbusprime.sample.routing.CompleteWorkOutcomeRouter
-import io.jrb.labs.eventbusprime.sample.routing.ValidateWorkOutcomeRouter
-import io.jrb.labs.eventbusprime.sample.steps.ApproveWorkStep
-import io.jrb.labs.eventbusprime.sample.steps.CompleteWorkStep
-import io.jrb.labs.eventbusprime.sample.steps.ValidateWorkStep
-import io.jrb.labs.eventbusprime.sample.workflow.SampleWorkWorkflowDefinition
+import io.jrb.labs.eventbusprime.sample.simple.events.SampleEventBus
+import io.jrb.labs.eventbusprime.sample.simple.routing.CompleteWorkOutcomeRouter
+import io.jrb.labs.eventbusprime.sample.simple.routing.ValidateWorkOutcomeRouter
+import io.jrb.labs.eventbusprime.sample.simple.steps.ApproveWorkStep
+import io.jrb.labs.eventbusprime.sample.simple.steps.CompleteWorkStep
+import io.jrb.labs.eventbusprime.sample.simple.steps.ValidateWorkStep
+import io.jrb.labs.eventbusprime.sample.simple.workflow.SampleWorkWorkflowDefinition
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

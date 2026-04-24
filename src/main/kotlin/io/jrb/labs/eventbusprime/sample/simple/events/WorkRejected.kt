@@ -22,31 +22,18 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.steps
+package io.jrb.labs.eventbusprime.sample.simple.events
 
-import io.jrb.labs.commons.workflow.api.StepResult
-import io.jrb.labs.commons.workflow.api.WorkflowContext
-import io.jrb.labs.commons.workflow.api.WorkflowInstance
-import io.jrb.labs.commons.workflow.api.WorkflowStep
-import io.jrb.labs.eventbusprime.sample.events.ApprovalReceived
-import io.jrb.labs.eventbusprime.sample.events.WorkCompleted
+import io.jrb.labs.commons.workflow.api.BaseWorkflowEvent
 
-class ApproveWorkStep : WorkflowStep<ApprovalReceived, WorkCompleted> {
-
-    override val name: String = "approve-work"
-
-    override suspend fun handle(
-        instance: WorkflowInstance,
-        event: ApprovalReceived,
-        context: WorkflowContext
-    ): StepResult<WorkCompleted> =
-        StepResult.Success(
-            WorkCompleted(
-                requestId = event.requestId,
-                result = "Approved by ${event.approvedBy}",
-                correlationId = event.correlationId,
-                causationId = event.eventId,
-                workflowInstanceId = instance.instanceId
-            )
-        )
-}
+data class WorkRejected(
+    val requestId: String,
+    val reason: String,
+    override val correlationId: String = requestId,
+    override val causationId: String? = null,
+    override val workflowInstanceId: String? = null
+) : BaseWorkflowEvent(
+    correlationId = correlationId,
+    causationId = causationId,
+    workflowInstanceId = workflowInstanceId
+)

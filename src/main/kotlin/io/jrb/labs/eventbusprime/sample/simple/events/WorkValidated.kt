@@ -22,14 +22,18 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.events
+package io.jrb.labs.eventbusprime.sample.simple.events
 
 import io.jrb.labs.commons.workflow.api.BaseWorkflowEvent
 
-data class WorkRequested(
+data class WorkValidated(
     val requestId: String,
-    val description: String,
-    override val correlationId: String = requestId
+    val normalizedDescription: String,
+    override val correlationId: String = requestId,
+    override val causationId: String? = null,
+    override val workflowInstanceId: String? = null
 ) : BaseWorkflowEvent(
-    correlationId = correlationId
+    correlationId = correlationId,
+    causationId = causationId,
+    workflowInstanceId = workflowInstanceId
 )

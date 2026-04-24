@@ -22,18 +22,10 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.events
+package io.jrb.labs.eventbusprime.sample.simple.web
 
-import io.jrb.labs.commons.workflow.api.BaseWorkflowEvent
-
-data class WorkCompleted(
+data class ApproveWorkRequest(
     val requestId: String,
-    val result: String,
-    override val correlationId: String = requestId,
-    override val causationId: String? = null,
-    override val workflowInstanceId: String? = null
-) : BaseWorkflowEvent(
-    correlationId = correlationId,
-    causationId = causationId,
-    workflowInstanceId = workflowInstanceId
+    val approvedBy: String,
+    val workflowInstanceId: String? = null
 )

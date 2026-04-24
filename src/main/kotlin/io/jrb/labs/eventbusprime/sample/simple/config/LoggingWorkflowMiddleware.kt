@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.config
+package io.jrb.labs.eventbusprime.sample.simple.config
 
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.workflow.api.StepResult

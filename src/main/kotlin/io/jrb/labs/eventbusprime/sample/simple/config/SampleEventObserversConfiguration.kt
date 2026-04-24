@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.config
+package io.jrb.labs.eventbusprime.sample.simple.config
 
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.eventbus.EventBus
-import io.jrb.labs.eventbusprime.sample.events.ApprovalRequested
-import io.jrb.labs.eventbusprime.sample.events.WorkCompleted
-import io.jrb.labs.eventbusprime.sample.events.WorkRejected
+import io.jrb.labs.eventbusprime.sample.simple.events.ApprovalRequested
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkCompleted
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkRejected
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

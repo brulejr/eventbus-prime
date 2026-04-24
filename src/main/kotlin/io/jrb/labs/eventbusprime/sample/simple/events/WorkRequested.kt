@@ -22,9 +22,14 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.events
+package io.jrb.labs.eventbusprime.sample.simple.events
 
-import io.jrb.labs.commons.eventbus.Event
-import io.jrb.labs.commons.eventbus.EventBus
+import io.jrb.labs.commons.workflow.api.BaseWorkflowEvent
 
-class SampleEventBus : EventBus<Event>()
+data class WorkRequested(
+    val requestId: String,
+    val description: String,
+    override val correlationId: String = requestId
+) : BaseWorkflowEvent(
+    correlationId = correlationId
+)

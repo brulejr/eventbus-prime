@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.steps
+package io.jrb.labs.eventbusprime.sample.simple.steps
 
 import io.jrb.labs.commons.workflow.api.StepResult
 import io.jrb.labs.commons.workflow.api.WorkflowContext
 import io.jrb.labs.commons.workflow.api.WorkflowInstance
 import io.jrb.labs.commons.workflow.api.WorkflowStep
-import io.jrb.labs.eventbusprime.sample.events.WorkRequested
-import io.jrb.labs.eventbusprime.sample.events.WorkValidated
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkRequested
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkValidated
 import org.springframework.stereotype.Component
 
 @Component

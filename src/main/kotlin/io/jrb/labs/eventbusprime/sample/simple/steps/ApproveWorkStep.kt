@@ -22,9 +22,31 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.web
+package io.jrb.labs.eventbusprime.sample.simple.steps
 
-data class SubmitWorkRequest(
-    val requestId: String,
-    val description: String
-)
+import io.jrb.labs.commons.workflow.api.StepResult
+import io.jrb.labs.commons.workflow.api.WorkflowContext
+import io.jrb.labs.commons.workflow.api.WorkflowInstance
+import io.jrb.labs.commons.workflow.api.WorkflowStep
+import io.jrb.labs.eventbusprime.sample.simple.events.ApprovalReceived
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkCompleted
+
+class ApproveWorkStep : WorkflowStep<ApprovalReceived, WorkCompleted> {
+
+    override val name: String = "approve-work"
+
+    override suspend fun handle(
+        instance: WorkflowInstance,
+        event: ApprovalReceived,
+        context: WorkflowContext
+    ): StepResult<WorkCompleted> =
+        StepResult.Success(
+            WorkCompleted(
+                requestId = event.requestId,
+                result = "Approved by ${event.approvedBy}",
+                correlationId = event.correlationId,
+                causationId = event.eventId,
+                workflowInstanceId = instance.instanceId
+            )
+        )
+}

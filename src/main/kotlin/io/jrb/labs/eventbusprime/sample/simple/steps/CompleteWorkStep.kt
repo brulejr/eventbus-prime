@@ -22,17 +22,34 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.events
+package io.jrb.labs.eventbusprime.sample.simple.steps
 
-import io.jrb.labs.commons.workflow.api.BaseWorkflowEvent
+import io.jrb.labs.commons.workflow.api.StepResult
+import io.jrb.labs.commons.workflow.api.WorkflowContext
+import io.jrb.labs.commons.workflow.api.WorkflowInstance
+import io.jrb.labs.commons.workflow.api.WorkflowStep
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkCompleted
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkValidated
+import org.springframework.stereotype.Component
 
-data class ApprovalRequested(
-    val requestId: String,
-    override val correlationId: String = requestId,
-    override val causationId: String? = null,
-    override val workflowInstanceId: String? = null
-) : BaseWorkflowEvent(
-    correlationId = correlationId,
-    causationId = causationId,
-    workflowInstanceId = workflowInstanceId
-)
+@Component
+class CompleteWorkStep : WorkflowStep<WorkValidated, WorkCompleted> {
+    override val name: String = "complete-work"
+
+    override suspend fun handle(
+        instance: WorkflowInstance,
+        event: WorkValidated,
+        context: WorkflowContext
+    ): StepResult<WorkCompleted> {
+        return StepResult.Success(
+            WorkCompleted(
+                requestId = event.requestId,
+                result = "Processed: ${event.normalizedDescription}",
+                correlationId = event.correlationId,
+                causationId = event.eventId,
+                workflowInstanceId = instance.instanceId
+            )
+        )
+    }
+
+}

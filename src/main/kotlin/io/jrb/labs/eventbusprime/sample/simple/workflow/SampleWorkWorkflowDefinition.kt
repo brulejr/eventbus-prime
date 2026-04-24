@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.workflow
+package io.jrb.labs.eventbusprime.sample.simple.workflow
 
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.workflow.api.WorkflowDefinition
 import io.jrb.labs.commons.workflow.api.WorkflowTransition
-import io.jrb.labs.eventbusprime.sample.events.ApprovalReceived
-import io.jrb.labs.eventbusprime.sample.events.WorkRequested
-import io.jrb.labs.eventbusprime.sample.routing.CompleteWorkOutcomeRouter
-import io.jrb.labs.eventbusprime.sample.routing.ValidateWorkOutcomeRouter
-import io.jrb.labs.eventbusprime.sample.steps.ApproveWorkStep
-import io.jrb.labs.eventbusprime.sample.steps.ValidateWorkStep
+import io.jrb.labs.eventbusprime.sample.simple.events.ApprovalReceived
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkRequested
+import io.jrb.labs.eventbusprime.sample.simple.routing.CompleteWorkOutcomeRouter
+import io.jrb.labs.eventbusprime.sample.simple.routing.ValidateWorkOutcomeRouter
+import io.jrb.labs.eventbusprime.sample.simple.steps.ApproveWorkStep
+import io.jrb.labs.eventbusprime.sample.simple.steps.ValidateWorkStep
 
 class SampleWorkWorkflowDefinition(
     validateWorkStep: ValidateWorkStep,

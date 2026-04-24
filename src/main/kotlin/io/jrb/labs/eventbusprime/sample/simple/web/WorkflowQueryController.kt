@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.web
+package io.jrb.labs.eventbusprime.sample.simple.web
 
 import io.jrb.labs.commons.workflow.spi.WorkflowInstanceStore
 import kotlinx.coroutines.runBlocking

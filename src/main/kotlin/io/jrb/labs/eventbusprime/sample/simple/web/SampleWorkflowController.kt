@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.web
+package io.jrb.labs.eventbusprime.sample.simple.web
 
 import io.jrb.labs.commons.eventbus.Event
 import io.jrb.labs.commons.eventbus.EventBus
-import io.jrb.labs.eventbusprime.sample.events.ApprovalReceived
-import io.jrb.labs.eventbusprime.sample.events.WorkRequested
+import io.jrb.labs.eventbusprime.sample.simple.events.ApprovalReceived
+import io.jrb.labs.eventbusprime.sample.simple.events.WorkRequested
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping

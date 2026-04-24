@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-package io.jrb.labs.eventbusprime.sample.web
+package io.jrb.labs.eventbusprime.sample.simple.events
 
-data class ApproveWorkRequest(
-    val requestId: String,
-    val approvedBy: String,
-    val workflowInstanceId: String? = null
-)
+import io.jrb.labs.commons.eventbus.Event
+import io.jrb.labs.commons.eventbus.EventBus
+
+class SampleEventBus : EventBus<Event>()
